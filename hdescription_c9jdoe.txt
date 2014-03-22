@@ -1,0 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% CSC384 Introduction to Artificial Intelligence, Winter 2014
+% Assignment 2
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-------------------------
+% Surname: Doe
+% First Name: John
+% Student Number: 123456789
+%
+% Create an English description and justification of the heuristic you
+% implemented. You are welcome to do a little bit research of your
+% own to come up with a better evaluation function. Make sure to cite
+% all references you used (if any) for this question. 
+%
