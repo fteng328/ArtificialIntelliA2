@@ -8,7 +8,9 @@
   ------------------------------------------------------ */
 
 %do not chagne the follwoing line!
+:- use_module(library(lists)).
 :- ensure_loaded('play.pl').
+
 
 % /* ------------------------------------------------------ */
 %               IMPORTANT! PLEASE READ THIS SUMMARY:
@@ -54,39 +56,55 @@
 % given helper: Inital state of the board 
 initBoard([ [.,.,.,.,.,.], 
             [.,.,.,.,.,.],
-	    [.,.,1,2,.,.], 
-	    [.,.,2,1,.,.], 
+	    	[.,.,1,2,.,.], 
+	    	[.,.,2,1,.,.], 
             [.,.,.,.,.,.], 
-	    [.,.,.,.,.,.] ]).
- 
+	    	[.,.,.,.,.,.] ]).
+/*initBoard([ [1,2,1,1,1,1], 
+            [2,1,1,2,2,1],
+	    	[2,1,1,2,1,1], 
+	    	[1,1,2,1,1,1], 
+            [1,2,1,1,1,1], 
+	    	[1,2,2,1,1,1] ]).
+*/ 
 %%%%%%%%%%%%%%%%%% IMPLEMENT: initialize(...)%%%%%%%%%%%%%%%%%%%%%
 %%% Using initBoard define initialize(InitialState,InitialPlyr). 
 %%%  holds iff InitialState is the initial state and 
 %%%  InitialPlyr is the player who moves first. 
 initialize([[.,.,.,.,.,.], 
             [.,.,.,.,.,.],
-	    [.,.,1,2,.,.], 
-	    [.,.,2,1,.,.], 
+	    	[.,.,1,2,.,.], 
+	    	[.,.,2,2,1,.], 
             [.,.,.,.,.,.], 
-	    [.,.,.,.,.,.] ],1).%by convention, player 1 to go first
+	    	[.,.,.,.,.,.] ],1).%by convention, player 1 to go first
 
-
+/*initialize([[1,2,1,1,1,1], 
+            [2,1,2,2,2,2],
+	    	[1,2,1,1,1,1], 
+	    	[2,1,2,2,2,2], 
+            [1,2,1,1,1,1], 
+	    	[2,1,2,2,2,2]],1).*/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%winner(...)%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% define winner(State,Plyr) here.  
 %     - returns winning player if State is a terminal position and
 %     Plyr has a higher score than the other player 
-winner(state,Plyr). % the board is filled and some1 has score more than 18.
-
-
-
+winner(B,1):- % the board is filled and some1 has score more than 18.
+	board_is_full(B),
+	count1(B,N),
+	count2(B,M),N>M.
+winner(B,2):-
+	board_is_full(B),
+	count1(B,N),
+	count2(B,M),N<M.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%tie(...)%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% define tie(State) here. 
 %    - true if terminal State is a "tie" (no winner) 
-tie(state). % the board is filled with both player having score = 18.
-
+tie(B) :- \+ % the board is filled with both player having score = 18.
+	winner(B,_),
+	board_is_full(B).
 
 
 
@@ -124,65 +142,9 @@ printList([H | L]) :-
 %% define moves(Plyr,State,MvList). 
 %   - returns list MvList of all legal moves Plyr can make in State
 %
-moves(_,State,MvList):-
-	testmoves(64,State,[],MvList).
 
-testmoves(Pos,St,SoFar,MvList):-
-	Pos>0,
-	validmove(_,St,Pos), !,
-	NextPos is Pos-1,
-	testmoves(NextPos,St,[Pos|SoFar],MvList).
+%moves(_,State,Mvliste):-validmove(_,), add to list .
 
-testmoves(Pos,St,SoFar,MvList) :-
-  Pos > 0,
-  NextPos is Pos - 1,
-  testmoves(NextPos,St,SoFar,MvList).
-
-
-testmoves(0,_,MvList,MvList).
-
-
-validmove(_,[[.,_,_,_,_,_],_,_,_,_,_],1)
-validmove(_,[[_,.,_,_,_,_],_,_,_,_,_],2)
-validmove(_,[[_,_,.,_,_,_],_,_,_,_,_],3)
-validmove(_,[[_,_,_,.,_,_],_,_,_,_,_],4)
-validmove(_,[[_,_,_,_,.,_],_,_,_,_,_],5)
-validmove(_,[[_,_,_,_,_,.],_,_,_,_,_],6)
-
-validmove(_,[_,[.,_,_,_,_,_],_,_,_,_],7)
-validmove(_,[_,[_,.,_,_,_,_],_,_,_,_],8)
-validmove(_,[_,[_,_,.,_,_,_],_,_,_,_],9)
-validmove(_,[_,[_,_,_,.,_,_],_,_,_,_],10)
-validmove(_,[_,[_,_,_,_,.,_],_,_,_,_],11)
-validmove(_,[_,[_,_,_,_,_,.],_,_,_,_],12)
-
-validmove(_,[_,_,[.,_,_,_,_,_],_,_,_],13)
-validmove(_,[_,_,[_,.,_,_,_,_],_,_,_],14)
-validmove(_,[_,_,[_,_,.,_,_,_],_,_,_],15)
-validmove(_,[_,_,[_,_,_,.,_,_],_,_,_],16)
-validmove(_,[_,_,[_,_,_,_,.,_],_,_,_],17)
-validmove(_,[_,_,[_,_,_,_,_,.],_,_,_],18)
-
-validmove(_,[_,_,_,[.,_,_,_,_,_],_,_],19)
-validmove(_,[_,_,_,[_,.,_,_,_,_],_,_],20)
-validmove(_,[_,_,_,[_,_,.,_,_,_],_,_],21)
-validmove(_,[_,_,_,[_,_,_,.,_,_],_,_],22)
-validmove(_,[_,_,_,[_,_,_,_,.,_],_,_],23)
-validmove(_,[_,_,_,[_,_,_,_,_,.],_,_],24)
-
-validmove(_,[_,_,_,_,[.,_,_,_,_,_],_],25)
-validmove(_,[_,_,_,_,[_,.,_,_,_,_],_],26)
-validmove(_,[_,_,_,_,[_,_,.,_,_,_],_],27)
-validmove(_,[_,_,_,_,[_,_,_,.,_,_],_],28)
-validmove(_,[_,_,_,_,[_,_,_,_,.,_],_],29)
-validmove(_,[_,_,_,_,[_,_,_,_,_,.],_],30)
-
-validmove(_,[_,_,_,_,_,[.,_,_,_,_,_]],31)
-validmove(_,[_,_,_,_,_,[_,.,_,_,_,_]],32)
-validmove(_,[_,_,_,_,_,[_,_,.,_,_,_]],33)
-validmove(_,[_,_,_,_,_,[_,_,_,.,_,_]],34)
-validmove(_,[_,_,_,_,_,[_,_,_,_,.,_]],35)
-validmove(_,[_,_,_,_,_,[_,_,_,_,_,.]],36)
 
 
 %%%%%%%%%%%%%%nextState(Plyr,Move,State,NewState,NextPlyr)%%%%%%%%%%%%%%%%%%%%
@@ -200,8 +162,11 @@ validmove(_,[_,_,_,_,_,[_,_,_,_,_,.]],36)
 %% define validmove(Plyr,State,Proposed). 
 %   - true if Proposed move by Plyr is valid at State.
 
-
-
+validmove(1,B,[R,C]):- get(B,[R,C],'.'),
+	get(B,[X,C],2),
+	X is R+1,checkright(1,B,[X,C]).
+checkright(1,B,[X,C]):-
+	 (get(B,[Y,C],1),Y is X+1).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%h(State,Val)%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -271,7 +236,7 @@ validmove(_,[_,_,_,_,_,[_,_,_,_,_,.]],36)
 % . . . . . . 
 % . . . . . . 
 % . . 1 2 . . 
-% . . 2 1 . . 
+% . . 2 1 . . initBoard(B)
 % . . . . . . 
 % . . . . . .
 % 
@@ -281,7 +246,7 @@ validmove(_,[_,_,_,_,_,[_,_,_,_,_,.]],36)
 % . . 1 1 . . 
 % . . 1 . . . 
 % . . . . . .
-%
+%initBoard(B)
 %B = [['.', '.', '.', '.', '.', '.'], ['.', '.', '.', '.', '.', '.'], ['.', '.', 
 %1, 2, '.', '.'], ['.', '.', 2, 1, '.'|...], ['.', '.', '.', '.'|...], ['.', '.',
 % '.'|...]]
@@ -316,4 +281,23 @@ setInList( [Element|RestList], [Element|NewRestList], Index, Value) :-
 	Index > 0, 
 	Index1 is Index-1, 
 	setInList( RestList, NewRestList, Index1, Value). 
- 
+%%%%%%%%%%%%%%%%%%%%%%%%HELPERS%%%%%%%%%%%%%%%%%% 
+% notmember(E,L) is true if E is not a member of list L
+notmember(_,[]).
+notmember(N,[H|T]) :- N \= H, notmember(N,T).
+
+
+
+
+
+board_is_full(B):- \+get(B,[X,Y],'.').
+
+count2(B,Num):-
+	flatten(B,G),count(2,G,Num).
+
+count1(B,Num):-
+	flatten(B,G),count(1,G,Num).
+
+count(_,[],0).
+         	count(A,[A|L],N):- !,count(A,L,N1),N is N1+1.
+         	count(A,[_|L],N):- count(A,L,N). 
