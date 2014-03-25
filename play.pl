@@ -62,7 +62,7 @@
 % * upperBound(B) 
 %   - returns a value B greater than the actual utility or heuristic value 
 %     of any node (i.e., greater than Max's best possible value) 
-% 
+%  
 % Note that lowerBound and upperBound are static properties of the 
 % game.  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
