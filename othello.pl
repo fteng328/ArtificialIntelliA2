@@ -10,6 +10,7 @@
 %do not chagne the follwoing line!
 :- use_module(library(lists)).
 :- ensure_loaded('play.pl').
+:- use_module(library(sort)).
 
 
 % /* ------------------------------------------------------ */
@@ -143,9 +144,15 @@ printList([H | L]) :-
 %   - returns list MvList of all legal moves Plyr can make in State
 %
 
-moves(1,State,Mvliste):- findall(X, validmove(1,State,X),Mvliste).
-moves(2,State,Mvliste):- findall(X, validmove(2,State,X),Mvliste).
+moves(1,State,Y):- findall(X, validmove(1,State,X),Mvliste),predsort(compareSecond, Mvliste, X),predsort(compareFirst,X,Y).
+moves(2,State,Y):- findall(X, validmove(2,State,X),Mvliste),predsort(compareSecond, Mvliste, X),predsort(compareFirst,X,Y).
 
+%helper used to sort the legal moves in the right order
+compareSecond(Delta, [_, A], [_, B]):-
+        A == B;compare(Delta, A, B).
+
+compareFirst(Gamma,[A,C],[B,D]):-
+        A == B,compare(Gamma, C, D);compare(Gamma, A, B).
 
 %%%%%%%%%%%%%%nextState(Plyr,Move,State,NewState,NextPlyr)%%%%%%%%%%%%%%%%%%%%
 %% 
@@ -431,7 +438,7 @@ checkDiag_botright(2,B,[R,C]):-
 %          the value of state (see handout on ideas about
 %          good heuristics.
 
-%h(_,0).
+h(S,0):- \+ terminal(S).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%lowerBound(B)%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -439,7 +446,7 @@ checkDiag_botright(2,B,[R,C]):-
 %% define lowerBound(B).  
 %   - returns a value B that is less than the actual or heuristic value
 %     of all states.
-lowerBound(-2).
+lowerBound(-100).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%upperBound(B)%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 
@@ -447,7 +454,7 @@ lowerBound(-2).
 %   - returns a value B that is greater than the actual or heuristic value
 %     of all states.
 
-upperBound(6).
+upperBound(100).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                       %

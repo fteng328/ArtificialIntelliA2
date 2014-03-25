@@ -1,3 +1,10 @@
+:- use_module(library(sort)).
+compareSecond(Delta, [_, A], [_, B]):-
+        A == B;compare(Delta, A, B).
+
+compareFirst(Gamma,[A,C],[B,D]):-
+        A == B,compare(Gamma, C, D);compare(Gamma, A, B).
+
 elephant(fred).
 elephant(mary).
 elephant(joe).
